@@ -67,13 +67,20 @@ appendFunc(a, minCell);
 // a.append(minCell);
 
 $(".schedule-table").append(a);
+
 }
 
-
+function clearInput() {
+    $("#train-name").val("");
+    $("#destination").val("");
+    $("#first-train-time").val("");
+    $("#frequency").val("");
+}
 
 $(".submit").on("click", function(event){
     event.preventDefault();
     i++;
     addTrain();
+    clearInput();
 })
 
