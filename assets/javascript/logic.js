@@ -120,12 +120,52 @@ function checkTime() {
         console.log("first train already: " + firstTrainAlready);
 
         if(firstTrainAlready) {
-            nextArrival = "Soon";
-            minutesAway = "soon";
+            add();
+            function add(){
+                firstMinute += parseInt(trains[i].Frequency)
+                if (firstMinute>=60){
+                    firstHour++;
+                    firstMinute-=60;
+                    console.log("added an hour, subtracted 60 minutes");
+                    console.log(firstHour + " " + firstMinute);
+                    //this works!
+                };
+                if (currentHour<firstHour) {
+
+                    
+
+                    if(firstMinute===0){
+                        firstMinute="00";
+                    }
+                    nextArrival = `${firstHour}:${firstMinute}`
+                    minutesAway = "soon";
+
+                }
+                else if (currentHour===firstHour) {
+                    if(currentMinute<firstMinute){
+                        nextArrival = `${currentHour}:${firstMinute}`;
+                        minutesAway = `${firstMinute-currentMinute} min`;
+                        console.log("current hour equals first hour");
+                        //this works!
+                    }
+                    else if (currentMinute===firstMinute){
+                        nextArrival = "Now";
+                        minutesAway = "0 min";
+                        console.log("last else if");
+                        //this works!
+                    }
+                }
+                else {
+                    add();
+                    //this works!
+                }
+                
+            }
         }
         else if(rightNow){
             nextArrival = "Now";
             minutesAway = "0 min";
+            //this works!
         }
         else {
             nextArrival = firstTrainTime;
@@ -141,6 +181,7 @@ function checkTime() {
             else{
                 minutesAway = `${hours} hr ${minutes} min`;
             }
+            //this works!!
         }
 
         //reprint whole array
