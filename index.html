@@ -18,12 +18,12 @@
 <body>
 
     <header class="center-align teal darken-3 white-text">
-        <div class="container main-header"><span class="main-header-text">Train Scheduler</span></div>
+        <div class="container main-header z-depth-2"><span class="main-header-text">Train Scheduler</span></div>
     </header>
 
     <main>
         <div class="container">
-            <div class="table">
+            <div class="table z-depth-2">
                 <div class="header left-align teal darken-3 white-text">Current Train Schedule</div>
                 <div class="table-stuff">
                     <table class="schedule-table">
@@ -44,23 +44,23 @@
                     </table>
                 </div>
             </div>
-            <div class="form">
+            <div class="form z-depth-2">
                 <div class="header left-align teal darken-3 white-text">Add Train</div>
                 <form action="">
                     
                     <input type="text" id="train-name" placeholder="Oregon Trail">
                     <label for="train-name">Train Name</label>
-                    
+                    <br><br>
                     <input type="text" id="destination" placeholder="Salem, Oregon">
                     <label for="destination">Destination</label>
-                    
+                    <br><br>
                     <input type="text" id="first-train-time" placeholder="17:55">
                     <label for="first-train-time">First Train Time (hh:mm --military time--)</label>
-                    
+                    <br><br>
                     <input type="number" id="frequency" placeholder="30">
-                    <label id="frequency-label" for="frequency">Frequency (min)</label>
+                    <label for="frequency">Frequency (min)</label>
 
-                    <input class="submit teal darken-3 white-text" type="submit" value="Submit">
+                    <input class="submit teal darken-3 white-text z-depth-2" type="submit" value="Submit">
                 </form>
             </div>
         </div>
