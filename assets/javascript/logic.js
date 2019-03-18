@@ -1,6 +1,11 @@
-var trains = [{Name: "Dublin", Destination: "San Fransisco", Frequency: 25, Next_Arrival: "03:10", Minutes_Away: 5}];
+var trains = [];
 
-var i = 0;
+//variables that will be printed to the table
+
+let name;
+let destination;
+let frequency;
+let firstTrain;
 
 
 //appends your item to your chosen tag/element
@@ -12,98 +17,21 @@ function appendFunc(dest, item){
 
 //pushes user input as an object into trains array, and posts it on html page
 function addTrain() {
-
-    //useful variables
-    let currentTime = moment().format("HH:mm");
-    let currentHoursAndMinutes = currentTime.split(":");
-    let currentHour = parseInt(currentHoursAndMinutes[0]);
-    let currentMinute = parseInt(currentHoursAndMinutes[1]);
-    // console.log(currentHour);
-    // console.log(typeof currentHour);
-    // console.log(currentMinute);
-    // console.log(typeof currentMinute);
-
-    let firstTrain = $("#first-train-time").val().trim();
-    let firstHoursAndMinutes = firstTrain.split(":");
-    let firstHour = parseInt(firstHoursAndMinutes[0]);
-    let firstMinute = parseInt(firstHoursAndMinutes[1]);
-    // console.log(firstHour);
-    // console.log(typeof firstHour);
-    // console.log(firstMinute);
-    // console.log(typeof firstMinute);
-
-    let firstTrainAlready = false;
-    let rightNow = false;
-
-    if (currentHour>firstHour) {
-        firstTrainAlready = true;
-    }
-    else if (currentHour===firstHour) {
-        if(currentMinute>firstMinute){
-            firstTrainAlready = true;
-        }
-        else if (currentMinute===firstMinute){
-            rightNow = true;
-        }
-        else {
-            firstTrainAlready = false;
-        }
-    }
-    else {
-        firstTrainAlready = false;
-    }
-
-    console.log(firstTrainAlready);
-    console.log(rightNow);
-
-
-
-
-    //variables that will be printed to the table
-    let name = $("#train-name").val().trim();
-    let destination = $("#destination").val().trim();
-    let frequency = $("#frequency").val().trim();
-    let nextArrival = "moment";
-    let minutesAway = "moment";
-
-
-
-    let newTrain = {
+    name = $("#train-name").val().trim();
+    destination = $("#destination").val().trim();
+    frequency = $("#frequency").val().trim();
+    firstTrain = $("#first-train-time").val().trim();
+    newTrain = {
         Name: name,
         Destination: destination,
         First_Train: firstTrain,
         Frequency: frequency,
-        Next_Arrival: nextArrival,
-        Minutes_Away: minutesAway
     };
 
     trains.push(newTrain);
+    console.log(trains.length);
 
-
-    var a = $("<tr>");
-    var nameCell = $("<td>");
-    var destinationCell = $("<td>")
-    var freqCell = $("<td>");
-    var arrivalCell = $("<td>");
-    var minCell = $("<td>");
-
-    appendFunc(nameCell, trains[i].Name);
-    appendFunc(destinationCell, trains[i].Destination);
-    appendFunc(freqCell, trains[i].Frequency);
-    appendFunc(arrivalCell, trains[i].Next_Arrival);
-    appendFunc(minCell, trains[i].Minutes_Away);
-
-
-    appendFunc(a, nameCell);
-    appendFunc(a,destinationCell);
-    appendFunc(a, freqCell);
-    appendFunc(a, arrivalCell);
-    appendFunc(a, minCell);
-
-    appendFunc($(".schedule-table"), a);
-    console.log(newTrain);
-
-} //========end of add train function=============
+} 
 
 //clears out user input fields on html page
 function clearInput() {
@@ -116,11 +44,127 @@ function clearInput() {
 
 $(".submit").on("click", function(event){
     event.preventDefault();
-    i++;
     addTrain();
+    checkTime();
     clearInput();
+
+    
 })
 
 
+function checkTime() {
+    $(".schedule-table").empty();
+    let tableHead = $("<thead>");
+    let trainName = $("<th>");
+    trainName.append("Train Name");
+    tableHead.append(trainName);
+    let trainDestination = $("<th>");
+    trainDestination.append("Destination");
+    tableHead.append(trainDestination);
+    let trainFrequency = $("<th>");
+    trainFrequency.append("Frequency (min)");
+    tableHead.append(trainFrequency);
+    let trainNext = $("<th>");
+    trainNext.append("Next Arrival");
+    tableHead.append(trainNext);
+    let trainMinutes = $("<th>");
+    trainMinutes.append("Wait Time");
+    tableHead.append(trainMinutes);
 
 
+
+
+
+    $(".schedule-table").append(tableHead);
+
+
+    for (let i=0; i<trains.length; i++){
+        let firstTrainAlready = false;
+        let rightNow = false;
+        let nextArrival = "";
+        let minutesAway = "";
+        //parses the current hours and minutes
+        let currentTime = moment().format("HH:mm");
+        let currentHoursAndMinutes = currentTime.split(":");
+        let currentHour = parseInt(currentHoursAndMinutes[0]);
+        let currentMinute = parseInt(currentHoursAndMinutes[1]);
+        // console.log(currentHour);
+        // console.log(typeof currentHour);
+        // console.log(currentMinute);
+        // console.log(typeof currentMinute);
+
+        //parses the first train hours and minutes
+        let firstTrainTime = trains[i].First_Train;
+        let firstHoursAndMinutes = firstTrainTime.split(":");
+        let firstHour = parseInt(firstHoursAndMinutes[0]);
+        let firstMinute = parseInt(firstHoursAndMinutes[1]);
+        console.log(firstHour);
+        console.log(typeof firstHour);
+        console.log(firstMinute);
+        console.log(typeof firstMinute);
+
+        //determines if first train has already run or not
+
+        if (currentHour>firstHour) {
+            firstTrainAlready = true;
+        }
+        else if (currentHour===firstHour) {
+            if(currentMinute>firstMinute){
+                firstTrainAlready = true;
+            }
+            else if (currentMinute===firstMinute){
+                rightNow = true;
+            }
+        }
+
+        console.log("first train already: " + firstTrainAlready);
+
+        if(firstTrainAlready) {
+            nextArrival = "Soon";
+            minutesAway = "soon";
+        }
+        else if(rightNow){
+            nextArrival = "Now";
+            minutesAway = "0 min";
+        }
+        else {
+            nextArrival = firstTrainTime;
+            let hours = firstHour-currentHour;
+            let minutes = firstMinute-currentMinute;
+            if (minutes<0) {
+                hours--;
+                minutes+=60
+            }
+            if (hours===0){
+                minutesAway = `${minutes} min`;
+            }
+            else{
+                minutesAway = `${hours} hr ${minutes} min`;
+            }
+        }
+
+        //reprint whole array
+        var a = $("<tr>");
+        var nameCell = $("<td>");
+        var destinationCell = $("<td>")
+        var freqCell = $("<td>");
+        var arrivalCell = $("<td>");
+        var minCell = $("<td>");
+
+        appendFunc(nameCell, trains[i].Name);
+        appendFunc(destinationCell, trains[i].Destination);
+        appendFunc(freqCell, trains[i].Frequency);
+        appendFunc(arrivalCell, nextArrival);
+        appendFunc(minCell, minutesAway);
+
+
+        appendFunc(a, nameCell);
+        appendFunc(a,destinationCell);
+        appendFunc(a, freqCell);
+        appendFunc(a, arrivalCell);
+        appendFunc(a, minCell);
+
+        appendFunc($(".schedule-table"), a);
+            
+    }
+}
