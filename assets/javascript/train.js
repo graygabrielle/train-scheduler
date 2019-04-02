@@ -22,24 +22,27 @@ $(".submit").on("click", function() {
     let firstTrain = moment($("#first-train-time").val().trim(), "HH:mm").subtract(10, "years").format("X");
     let frequency = $("#frequency").val().trim();
 
-    // Creates local "temporary" object for holding train data
-    var newTrain = {
-        name: trainName,
-        destination: destination,
-        firstTrain: firstTrain,
-        frequency: frequency
+    if(trainName && destination && firstTrain && frequency){
+        // Creates local "temporary" object for holding train data
+        var newTrain = {
+            name: trainName,
+            destination: destination,
+            firstTrain: firstTrain,
+            frequency: frequency
+        }
+
+        // Uploads train data to the database
+        trainData.push(newTrain);
+
+        // Clears all of the text-boxes
+        $("#train-name").val("");
+        $("#destination").val("");
+        $("#first-train-time").val("");
+        $("#frequency").val("");
+
+        return false;
     }
-
-    // Uploads train data to the database
-    trainData.push(newTrain);
-
-    // Clears all of the text-boxes
-    $("#train-name").val("");
-    $("#destination").val("");
-    $("#first-train-time").val("");
-    $("#frequency").val("");
-
-    return false;
+    
 });
 
 
